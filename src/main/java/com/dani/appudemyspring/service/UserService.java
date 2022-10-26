@@ -12,6 +12,8 @@ public interface UserService extends UserDetailsService {
     UserEntity createUser(UserDto user);
     UserDto getUser(String email);
     UserDto getUserByUserId(long id);
+    UserEntity updateUser(long id, UserDto user);
+    void deleteUser(long id);
 
 
 
