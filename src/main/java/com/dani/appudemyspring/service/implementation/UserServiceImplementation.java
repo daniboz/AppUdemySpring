@@ -9,12 +9,16 @@ import com.dani.appudemyspring.shared.dto.UserDto;
 import com.dani.appudemyspring.ui.model.response.ErrorMessage;
 import com.dani.appudemyspring.ui.model.response.ErrorMessages;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserServiceImplementation implements UserService {
@@ -73,6 +77,17 @@ public class UserServiceImplementation implements UserService {
         if (userEntity == null) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
         userRepository.delete(userEntity);
+    }
+
+    @Override
+    public List<UserEntity> getUsers(int page, int limit) {
+
+        if(page>0) page = page-1;
+
+        Pageable pageableRequest = PageRequest.of(page, limit);
+        Page<UserEntity> usersPage = userRepository.findAll(pageableRequest);
+        List<UserEntity> users = usersPage.getContent();
+        return users;
     }
 
     @Override
